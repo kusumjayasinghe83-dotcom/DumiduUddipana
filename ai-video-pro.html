@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Anti-Copyright Pro - Dumidu Uddipana</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        .tool-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ccc;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            border-color: #ff0055;
+            outline: none;
+        }
+        .btn-process {
+            width: 100%;
+            padding: 14px;
+            background: #ff0055;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-process:hover {
+            background: #cc0044;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #16161a;
+            border-left: 4px solid #00ffcc;
+            border-radius: 4px;
+            font-family: monospace;
+            display: none;
+            word-wrap: break-word;
+        }
+        .copy-box {
+            background: #222;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-copy {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">DUMIDUUDDIPANA</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="trending.html">Tools</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="tool-container">
+        <h2 style="color: #ff0055; font-size: 28px; margin-bottom: 10px;"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Video Anti-Copyright Pro Engine</h2>
+        <p style="color: #888; margin-bottom: 25px;">දුමිඳු მචං, කිසිම Login/Register එකක් නැතුව කෙලින්ම Instagram Reels ලින්ක් එක දාලා ඇන්ටි-කොපිරයිට් කේතය Generate කරගන්න මෙතනින් පුළුවන්!</p>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-link"></i> Instagram Reel URL:</label>
+            <input type="text" id="instaUrl" class="form-control" placeholder="https://instagram.com... /">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-gauge-high"></i> Video Speed Multiplier: <span id="speedDisplay" style="color: #ff0055;">1.10x</span></label>
+            <input type="range" id="speedSlider" min="1.0" max="1.5" step="0.05" value="1.10" class="form-control" style="padding:0;" oninput="document.getElementById('speedDisplay').innerText = this.value + 'x'">
+        </div>
+
+        <div class="form-group" style="background: #1a1a1a; padding: 12px; border-radius: 6px; box-sizing: border-box;">
+            <label style="cursor: pointer; margin-bottom: 0; display: flex; align-items: center;">
+                <input type="checkbox" id="flipToggle" checked style="width: 20px; height: 20px; margin-right: 10px; accent-color: #ff0055;"> 
+                <span>🔄 Flip Video Horizontally (Mirror Effect for Anti-Copyright Detection)</span>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-signature"></i> Custom Watermark Text:</label>
+            <input type="text" id="watermarkLabel" class="form-control" value="NailVibe Studio">
+        </div>
+
+        <button class="btn-process" onclick="startLocalVideoEngine()"><i class="fa-solid fa-bolt"></i> GENERATE TERMINAL COMMAND</button>
+
+        <div id="engineStatus" class="status-box"></div>
+    </div>
+
+    <script>
+        function startLocalVideoEngine() {
+            const url = document.getElementById('instaUrl').value;
+            const speed = document.getElementById('speedSlider').value;
+            const flip = document.getElementById('flipToggle').checked;
+            const watermark = document.getElementById('watermarkLabel').value;
+            const statusBox = document.getElementById('engineStatus');
+
+            if (!url) {
+                alert("දුමිඳු මචං, ඉන්ස්ටා Reels ලින්ක් එක දාලා ඉන්නකෝ බොක්ක! 🔗");
+                return;
+            }
+
+            statusBox.style.display = "block";
+            const terminalCommand = `python app.py "${url}"`;
+
+            statusBox.innerHTML = `
+                <span style="color: #00ffcc; font-weight: bold;">[+] Command Generated Successfully!</span><br>
+                <p style="color: #aaa; margin: 5px 0;">ලැප්ටොප් එකේ ටර්මිනල් (Terminal) එකේ රන් කරන්න මේ කේතය Copy කරගන්න මචං:</p>
+                <div class="copy-box">
+                    <span id="cmdText" style="color: #fff; font-family: monospace;">${terminalCommand}</span>
+                    <button class="btn-copy" onclick="copyCommandToClipboard()">Copy</button>
+                </div>
+            `;
+        }
+
+        function copyCommandToClipboard() {
+            const cmdText = document.getElementById('cmdText').innerText;
+            navigator.clipboard.writeText(cmdText).then(() => {
+                alert("කේතය සාර්ථකව Copy කරගත්තා දුමිඳු බොක්ක! 🦾🔥");
+            });
+        }
+    </script>
+
+    <footer>
+        <p style="text-align: center; color: #555; margin-top: 40px;">© 2026 DumiduUddipana. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
