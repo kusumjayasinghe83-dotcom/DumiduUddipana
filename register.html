@@ -162,6 +162,39 @@
     ></p>
 
 
+    <!-- EMAIL CODE STEP (shown after Create Account) -->
+    <div id="verifyBox" style="display:none;">
+      <p id="verifyInfo"></p>
+      <label for="verifyCode">
+        Verification code
+      </label>
+      <input
+        type="text"
+        id="verifyCode"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        maxlength="10"
+        placeholder="Enter code"
+        style="letter-spacing:4px;font-size:20px;text-align:center;"
+      >
+      <button
+        type="button"
+        class="btn primary"
+        onclick="verifyRegisterCode(this)"
+      >
+        Verify
+      </button>
+      <button
+        type="button"
+        class="btn"
+        style="margin-top:10px;width:100%;"
+        onclick="resendRegisterCode(this)"
+      >
+        Resend code
+      </button>
+      <p id="verifyMessage" aria-live="polite"></p>
+    </div>
+
     <!-- ==================================
          GOOGLE SIGN IN
          ================================== -->
@@ -229,6 +262,7 @@
 <script src="script.js"></script>
 
 
+  <script src="support-widget.js" defer></script>
 </body>
 
 </html>

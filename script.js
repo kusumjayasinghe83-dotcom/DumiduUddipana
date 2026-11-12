@@ -757,10 +757,18 @@ function setupRegisterForm() {
             message.textContent =
               "✅ Account created successfully!";
 
-          } else {
+          } else if (
+            data?.user &&
+            Array.isArray(data.user.identities) &&
+            data.user.identities.length === 0
+          ) {
 
             message.textContent =
-              "✅ Account created! Check your email.";
+              "❌ This email is already registered. Please login.";
+
+          } else {
+
+            showVerifyStep(email);
 
           }
 
@@ -801,6 +809,101 @@ function setupRegisterForm() {
 
     }
   );
+
+}
+
+
+/* =========================================
+   EMAIL CODE VERIFICATION (after register)
+   Supabase emails a numeric code; the person
+   types it here to confirm the account.
+   ========================================= */
+
+let pendingVerifyEmail = "";
+
+function showVerifyStep(email) {
+
+  pendingVerifyEmail = email;
+
+  const form = document.getElementById("registerForm");
+  const box  = document.getElementById("verifyBox");
+  const msg  = document.getElementById("registerMessage");
+  const info = document.getElementById("verifyInfo");
+
+  if (form) form.style.display = "none";
+  if (msg)  msg.textContent = "";
+  if (info) info.textContent = "We sent a verification code to " + email + ". Enter it below.";
+  if (box)  box.style.display = "block";
+
+  const input = document.getElementById("verifyCode");
+  if (input) input.focus();
+
+}
+
+async function verifyRegisterCode(button) {
+
+  const input = document.getElementById("verifyCode");
+  const msg   = document.getElementById("verifyMessage");
+  const code  = (input?.value || "").replace(/\s+/g, "");
+
+  if (!/^\d{6,10}$/.test(code)) {
+    if (msg) msg.textContent = "❌ Enter the code from your email (numbers only).";
+    return;
+  }
+
+  if (!supabaseClient) startSupabase();
+  if (!supabaseClient) {
+    if (msg) msg.textContent = "❌ Connection error. Please refresh.";
+    return;
+  }
+
+  if (button) { button.disabled = true; button.textContent = "Verifying..."; }
+
+  const { data, error } = await supabaseClient.auth.verifyOtp({
+    email: pendingVerifyEmail,
+    token: code,
+    type: "signup"
+  });
+
+  if (button) { button.disabled = false; button.textContent = "Verify"; }
+
+  if (error) {
+    console.error("Verify error:", error);
+    if (msg) msg.textContent = "❌ Wrong or expired code. Try again or resend a new one.";
+    return;
+  }
+
+  if (msg) msg.textContent = "✅ Email verified! Taking you to your dashboard...";
+
+  setTimeout(function () {
+    window.location.href = WEBSITE_URL + "/dashboard.html";
+  }, 700);
+
+}
+
+async function resendRegisterCode(button) {
+
+  const msg = document.getElementById("verifyMessage");
+
+  if (!pendingVerifyEmail) return;
+  if (!supabaseClient) startSupabase();
+  if (!supabaseClient) return;
+
+  if (button) button.disabled = true;
+
+  const { error } = await supabaseClient.auth.resend({
+    type: "signup",
+    email: pendingVerifyEmail
+  });
+
+  if (msg) {
+    msg.textContent = error
+      ? "❌ " + error.message
+      : "✅ A new code was sent. Check your email (and Spam).";
+  }
+
+  // allow another resend after 60 seconds
+  setTimeout(function () { if (button) button.disabled = false; }, 60000);
 
 }
 
