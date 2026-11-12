@@ -9,106 +9,283 @@
         content="width=device-width, initial-scale=1.0">
 
   <title>Admin | DumiduUddipana</title>
+  <meta name="robots" content="noindex, nofollow">
 
   <link rel="stylesheet" href="style.css">
 
-</head>
+  <!-- Favicon / App icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="/manifest.json">
 
+  <style>
+    .adm { max-width: 860px; margin: 0 auto; padding: 30px 5% 80px; }
+    .adm h1 { margin: 6px 0 20px; }
+    .adm h2 { margin: 34px 0 14px; font-size: 22px; }
+    .adm .box { background:#fff; border:1px solid #e5e7eb; border-radius:18px; padding:20px; margin-bottom:16px; box-shadow:0 6px 20px rgba(15,23,42,.05); }
+    .adm label { display:block; font-size:13px; font-weight:700; color:#374151; margin:12px 0 5px; }
+    .adm input, .adm textarea { width:100%; padding:11px 13px; border:1px solid #d1d5db; border-radius:10px; font:inherit; font-size:15px; box-sizing:border-box; background:#fff; color:#111827; }
+    .adm textarea { min-height:70px; resize:vertical; }
+    .adm .row2 { display:grid; grid-template-columns:1fr 1fr; gap:0 14px; }
+    .adm .bar { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .adm button { cursor:pointer; border:0; border-radius:999px; padding:11px 20px; font-weight:700; font-size:14px; }
+    .adm .b-main { background:#4f46e5; color:#fff; }
+    .adm .b-sec { background:#eef2ff; color:#3730a3; }
+    .adm .b-del { background:#fee2e2; color:#b91c1c; }
+    .adm .hint { font-size:12.5px; color:#6b7280; margin-top:4px; }
+    .adm .msg { margin-top:12px; font-weight:700; font-size:14px; }
+    .adm .ok { color:#15803d; } .adm .err { color:#b91c1c; }
+    .adm .top { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+    .adm .save-all { position:sticky; bottom:12px; background:#fff; border:1px solid #e5e7eb; border-radius:18px; padding:14px 16px; box-shadow:0 10px 30px rgba(15,23,42,.15); }
+    #loginBox { max-width:420px; margin:40px auto; }
+    #editor { display:none; }
+    @media (max-width:600px){ .adm .row2{ grid-template-columns:1fr; } }
+  </style>
+</head>
 
 <body>
 
 <header class="navbar">
-
   <a href="index.html" class="logo">
-
     <span class="logo-box">DU</span>
-
     <span>DumiduUddipana</span>
-
   </a>
-
 </header>
 
+<section class="adm">
 
-<section class="admin-page">
+  <div class="eyebrow">ADMIN PANEL</div>
+  <h1>Site Editor</h1>
 
-  <div class="eyebrow">
-    ADMIN PANEL
+  <!-- LOGIN -->
+  <div id="loginBox" class="box">
+    <h2 style="margin-top:0">Admin Login</h2>
+    <label for="lEmail">Email</label>
+    <input id="lEmail" type="email" autocomplete="username">
+    <label for="lPass">Password</label>
+    <input id="lPass" type="password" autocomplete="current-password">
+    <div class="bar"><button class="b-main" id="lBtn" type="button">Login</button></div>
+    <div class="msg" id="lMsg"></div>
   </div>
 
+  <!-- EDITOR -->
+  <div id="editor">
 
-  <h1>
-    Academy Overview
-  </h1>
-
-
-  <div class="dashboard-grid">
-
-    <div class="dashboard-card">
-
-      <span>👨‍🎓</span>
-
-      <strong>0</strong>
-
-      <p>
-        Students
-      </p>
-
+    <div class="top">
+      <span id="who" class="hint"></span>
+      <span>
+        <a href="index.html#brands" target="_blank" class="btn secondary" style="padding:9px 16px">View site</a>
+        <button class="b-sec" id="outBtn" type="button">Logout</button>
+      </span>
     </div>
 
+    <h2>My Brands (cards on home page)</h2>
+    <div id="cards"></div>
+    <div class="bar"><button class="b-sec" id="addCard" type="button">+ Add brand card</button></div>
 
-    <div class="dashboard-card">
-
-      <span>📚</span>
-
-      <strong>4</strong>
-
-      <p>
-        Courses
-      </p>
-
+    <h2>Google / About me info</h2>
+    <div class="box">
+      <p class="hint" style="margin-top:0">This is written into the site's structured data (schema.org) so Google can understand who you are. Your social links from the brand cards above are added automatically.</p>
+      <label>Full name</label><input id="sName">
+      <label>Other spellings / names (comma separated)</label><input id="sAlt">
+      <div class="row2">
+        <div><label>Job title</label><input id="sJob"></div>
+        <div><label>Location</label><input id="sLoc"></div>
+      </div>
+      <label>Short description (about 150 characters is best)</label>
+      <textarea id="sDesc" maxlength="320"></textarea>
+      <div class="hint" id="descCount"></div>
+      <label>Profile image URL</label><input id="sImg">
     </div>
 
-
-    <div class="dashboard-card">
-
-      <span>💰</span>
-
-      <strong>LKR 0</strong>
-
-      <p>
-        Revenue
-      </p>
-
+    <div class="save-all">
+      <button class="b-main" id="saveBtn" type="button">Save everything</button>
+      <div class="msg" id="sMsg"></div>
     </div>
 
-  </div>
+    <h2>Messages</h2>
+    <div class="box">
+      <div class="bar" style="margin-top:0">
+        <button class="b-sec" id="msgRefresh" type="button">Refresh</button>
+      </div>
+      <h3 style="margin:16px 0 6px;font-size:16px">Contact messages</h3>
+      <div id="contactList" class="hint">Loading...</div>
+      <h3 style="margin:20px 0 6px;font-size:16px">Free eBook requests</h3>
+      <div id="ebookList" class="hint">Loading...</div>
+    </div>
 
-
-  <div class="admin-actions">
-
-    <a
-      href="courses.html"
-      class="btn primary">
-
-      Manage Courses
-
-    </a>
-
-
-    <a
-      href="dashboard.html"
-      class="btn secondary">
-
-      Student Dashboard
-
-    </a>
+    <h2>Academy</h2>
+    <div class="admin-actions">
+      <a href="courses.html" class="btn primary">Manage Courses</a>
+      <a href="dashboard.html" class="btn secondary">Student Dashboard</a>
+    </div>
 
   </div>
 
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="brands.js"></script>
+<script>
+(function () {
+  var S = window.DUSite;
+  var sb = window.supabase.createClient(S.SUPABASE_URL, S.SUPABASE_KEY);
+  var state = null;
+  function $(id) { return document.getElementById(id); }
+  function msg(id, text, ok) { var n = $(id); n.textContent = text; n.className = "msg " + (ok ? "ok" : "err"); }
+
+  // ---------- auth ----------
+  $("lBtn").onclick = async function () {
+    msg("lMsg", "Logging in...", true);
+    var r = await sb.auth.signInWithPassword({ email: $("lEmail").value.trim(), password: $("lPass").value });
+    if (r.error) return msg("lMsg", "Login failed: " + r.error.message, false);
+    showEditor(r.data.user);
+  };
+  $("outBtn").onclick = async function () { await sb.auth.signOut(); location.reload(); };
+
+  async function init() {
+    var r = await sb.auth.getSession();
+    if (r.data.session) showEditor(r.data.session.user);
+  }
+
+  async function showEditor(user) {
+    $("loginBox").style.display = "none";
+    $("editor").style.display = "block";
+    $("who").textContent = "Logged in as " + user.email;
+    state = await S.load();
+    renderCards();
+    fillSeo();
+    loadMessages();
+  }
+
+  // ---------- brand cards ----------
+  function field(label, value, onInput, opts) {
+    opts = opts || {};
+    var wrap = document.createElement("div");
+    var l = document.createElement("label"); l.textContent = label; wrap.appendChild(l);
+    var i = document.createElement(opts.area ? "textarea" : "input");
+    if (opts.placeholder) i.placeholder = opts.placeholder;
+    i.value = value || "";
+    i.oninput = function () { onInput(i.value); };
+    wrap.appendChild(i);
+    return wrap;
+  }
+
+  function renderCards() {
+    var box = $("cards");
+    box.innerHTML = "";
+    state.brands.cards.forEach(function (c, idx) {
+      c.links = c.links || {};
+      var d = document.createElement("div"); d.className = "box";
+      var h = document.createElement("strong"); h.textContent = "Card " + (idx + 1) + (c.name ? " - " + c.name : ""); d.appendChild(h);
+
+      var r1 = document.createElement("div"); r1.className = "row2";
+      r1.appendChild(field("Name", c.name, function (v) { c.name = v; }));
+      r1.appendChild(field("Logo letters (1-3)", c.logo, function (v) { c.logo = v.slice(0, 3); }));
+      d.appendChild(r1);
+      d.appendChild(field("Subtitle", c.subtitle, function (v) { c.subtitle = v; }));
+      d.appendChild(field("Description", c.description, function (v) { c.description = v; }, { area: true }));
+
+      var r2 = document.createElement("div"); r2.className = "row2";
+      S.PLATFORMS.forEach(function (p) {
+        r2.appendChild(field(p.label + " link", c.links[p.key], function (v) { c.links[p.key] = v.trim(); }, { placeholder: "https://..." }));
+      });
+      d.appendChild(r2);
+      var hint = document.createElement("div"); hint.className = "hint"; hint.textContent = "Leave a link empty to hide that button."; d.appendChild(hint);
+
+      var bar = document.createElement("div"); bar.className = "bar";
+      function btn(text, cls, fn) { var b = document.createElement("button"); b.type = "button"; b.className = cls; b.textContent = text; b.onclick = fn; bar.appendChild(b); }
+      if (idx > 0) btn("↑ Up", "b-sec", function () { swap(idx, idx - 1); });
+      if (idx < state.brands.cards.length - 1) btn("↓ Down", "b-sec", function () { swap(idx, idx + 1); });
+      btn("Delete card", "b-del", function () {
+        if (confirm("Delete this card?")) { state.brands.cards.splice(idx, 1); renderCards(); }
+      });
+      d.appendChild(bar);
+      box.appendChild(d);
+    });
+  }
+  function swap(a, b) { var arr = state.brands.cards; var t = arr[a]; arr[a] = arr[b]; arr[b] = t; renderCards(); }
+  $("addCard").onclick = function () {
+    state.brands.cards.push({ logo: "", name: "New Brand", subtitle: "", description: "", links: {} });
+    renderCards();
+  };
+
+  // ---------- seo ----------
+  var map = { sName: "name", sAlt: "alternateName", sJob: "jobTitle", sLoc: "location", sDesc: "description", sImg: "image" };
+  function fillSeo() {
+    Object.keys(map).forEach(function (id) {
+      $(id).value = state.seo[map[id]] || "";
+      $(id).oninput = function () { state.seo[map[id]] = $(id).value; count(); };
+    });
+    count();
+  }
+  function count() { $("descCount").textContent = $("sDesc").value.length + " characters"; }
+
+  // ---------- save ----------
+  $("saveBtn").onclick = async function () {
+    for (var i = 0; i < state.brands.cards.length; i++) {
+      var c = state.brands.cards[i];
+      if (!c.name || !c.name.trim()) return msg("sMsg", "Card " + (i + 1) + " needs a name.", false);
+      for (var k in c.links) {
+        if (c.links[k] && !S.isUrl(c.links[k])) return msg("sMsg", c.name + ": " + k + " link must start with https://", false);
+      }
+    }
+    msg("sMsg", "Saving...", true);
+    var now = new Date().toISOString();
+    var r = await sb.from("site_settings").upsert([
+      { key: "brands", value: state.brands, updated_at: now },
+      { key: "seo", value: state.seo, updated_at: now }
+    ]);
+    if (r.error) {
+      return msg("sMsg", "Could not save: " + r.error.message + " (is this account set as admin in the SQL setup?)", false);
+    }
+    msg("sMsg", "✅ Saved. The home page now shows the new data.", true);
+  };
+
+  // ---------- messages (readable only by the admin account) ----------
+  function listInto(id, rows, err, render) {
+    var box = $(id); box.innerHTML = "";
+    if (err) { box.className = "msg err"; box.textContent = "Could not load: " + err.message + " (run the messages SQL in Supabase first)"; return; }
+    if (!rows || !rows.length) { box.className = "hint"; box.textContent = "No entries yet."; return; }
+    box.className = "";
+    rows.forEach(function (r) {
+      var d = document.createElement("div");
+      d.style.cssText = "border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin-bottom:10px;background:#f9fafb";
+      render(d, r);
+      box.appendChild(d);
+    });
+  }
+  function line(d, text, bold) {
+    var p = document.createElement("div");
+    p.textContent = text;
+    if (bold) p.style.fontWeight = "700";
+    p.style.wordBreak = "break-word";
+    d.appendChild(p);
+  }
+  function when(r) { return r.created_at ? new Date(r.created_at).toLocaleString() : ""; }
+
+  async function loadMessages() {
+    var c = await sb.from("contact_messages").select("*").order("created_at", { ascending: false }).limit(100);
+    listInto("contactList", c.data, c.error, function (d, r) {
+      line(d, (r.name || "(no name)") + " - " + (r.email || ""), true);
+      line(d, r.message || "");
+      var t = document.createElement("div"); t.className = "hint"; t.textContent = when(r); d.appendChild(t);
+    });
+    var e = await sb.from("ebook_requests").select("*").order("created_at", { ascending: false }).limit(200);
+    listInto("ebookList", e.data, e.error, function (d, r) {
+      line(d, (r.name || "(no name)") + " - " + (r.email || ""), true);
+      var t = document.createElement("div"); t.className = "hint"; t.textContent = when(r); d.appendChild(t);
+    });
+  }
+  $("msgRefresh").onclick = loadMessages;
+
+  init();
+})();
+</script>
 
 </body>
-
 </html>
